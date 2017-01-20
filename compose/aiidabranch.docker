@@ -1,0 +1,5 @@
+from aiida/base
+arg branch=develop
+run git checkout $branch
+run pip install -Ue .
+cmd verdi daemon start

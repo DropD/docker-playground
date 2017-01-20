@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+    postgres:
+        image: "postgresql"
+        ports:
+            - "5432:4321"
+    aiidabase:
+        image: "aiida/base"
+        build:
+            context: .
+            dockerfile: aiidabase.docker
+    aiida:
+        image: "aiida/plugins"
+        ports:
+            - "5432:4321"
+        command: verdi daemon start
+        build:
+            context: .
+            dockerfile: aiidabranch.docker
+            args:
+                branch: ricoh-plugins
+        depends_on: 
+            postgres:
+                condition: service_started
+            aiidabase:
+                condition: service_started
+    setup:
+        build:
+            context: .
+            dockerfile: aiidasetup.docker
+        depends_on:
+            - aiida
