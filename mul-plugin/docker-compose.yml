@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+    db:
+        image: "postgres"
+        ports: 
+            - "4321:4321"
+    aiida: 
+        build: .
+        command: verdi daemon start
+        depends_on:
+            db:
+                condition: service_started
